@@ -1,0 +1,70 @@
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+
+        int n = nums1.size();
+
+        int m = nums2.size();
+
+        if(nums2.empty()){
+            return (n%2 == 0) ? (double)(nums1[n/2]+nums1[n/2 - 1])/2.0 : nums1[n/2];
+        }
+
+        if(nums1.empty()){
+            return (m%2 == 0) ? (double)(nums2[m/2]+nums2[m/2 - 1])/2.0 : nums2[m/2];
+        }
+
+        if(n > m){
+            return findMedianSortedArrays(nums2,nums1);
+        }
+
+        int i = 0, j = n;
+
+        int left = (n+m+1)/2;
+
+        while(i <= j){
+
+            int mid1 = (i+j)/2;
+
+            int mid2 = left - mid1;
+
+
+            int l1 = INT_MIN, l2 = INT_MIN, r1 = INT_MAX, r2 = INT_MAX;
+
+            if(mid1 - 1 >= 0){
+                l1 = nums1[mid1-1];
+            }
+
+            if(mid2 - 1 >= 0){
+                l2 = nums2[mid2-1];
+            }
+
+            if(mid1 < n){
+                r1 = nums1[mid1];
+            }
+
+            if(mid2 < m){
+                r2 = nums2[mid2];
+            }
+
+            if(l1 <= r2 && l2 <= r1){
+
+                if((n+m)%2 == 0){
+                    double avg = (double) (max(l1,l2) + min(r1,r2))/2.0;
+                    return avg;
+                }else{
+                    double avg = (double) max(l1,l2);
+                    return avg;
+                }
+
+            }else if(l1 > l2){
+                j = mid1-1;
+            }else{
+                i = mid1+1;
+            }
+
+        }
+        return -1;
+        
+    }
+};
